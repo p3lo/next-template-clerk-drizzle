@@ -1,4 +1,6 @@
 // import { prisma } from "@/lib/db";
+import { db } from '@/db/db';
+import { users } from '@/db/schema';
 import { clerkClient } from '@clerk/nextjs/server';
 import { IncomingHttpHeaders } from 'http';
 import { headers } from 'next/headers';
@@ -27,16 +29,11 @@ async function handler(request: Request) {
 
   const eventType: EventType = evt.type;
   if (eventType === 'user.created' || eventType === 'user.updated') {
-    const { id, ...attributes } = evt.data;
-    console.log(id, attributes);
-    // await prisma.user.upsert({
-    //   where: { externalId: id as string },
-    //   create: {
-    //     externalId: id as string,
-    //     attributes,
-    //   },
-    //   update: { attributes },
-    // });
+    const { id, username, ...attributes } = evt.data;
+    await db
+      .insert(users)
+      .values({ externalId: id as string, userInfo: attributes })
+      .onConflictDoUpdate({ target: users.externalId, set: { userInfo: attributes } });
   }
 }
 

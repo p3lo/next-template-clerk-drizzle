@@ -1,3 +1,5 @@
+import MigrateDbButton from '@/components/MigrateDbButton';
+import { Button } from '@/components/ui/button';
 import { UserButton, currentUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,8 +14,9 @@ export default function Home() {
   const user = getUser();
 
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-24">
+    <main className="flex flex-col items-center min-h-screen p-24">
       <Link href="/sign-up">Signup</Link>
+      <MigrateDbButton />
       {user.then((user) => {
         if (user) {
           return (
