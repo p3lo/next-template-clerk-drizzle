@@ -1,6 +1,7 @@
-import MigrateDbButton from '@/components/MigrateDbButton';
 import { Button } from '@/components/ui/button';
+import { db } from '@/db/db';
 import { UserButton, currentUser } from '@clerk/nextjs';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,10 +14,18 @@ async function getUser() {
 export default function Home() {
   const user = getUser();
 
+  async function handleMigrateDb() {
+    'use server';
+    const migration = await migrate(db, { migrationsFolder: 'db/migrations' });
+    console.log(migration);
+  }
+
   return (
     <main className="flex flex-col items-center min-h-screen p-24">
       <Link href="/sign-up">Signup</Link>
-      <MigrateDbButton />
+      <form action={handleMigrateDb}>
+        <Button>MigrateDB</Button>
+      </form>
       {user.then((user) => {
         if (user) {
           return (
