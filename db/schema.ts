@@ -1,5 +1,5 @@
 import type { InferModel } from 'drizzle-orm';
-import { json, pgTable, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { integer, json, pgTable, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable(
   'users',
@@ -12,6 +12,22 @@ export const users = pgTable(
   (users) => {
     return {
       externalIdIndex: uniqueIndex('externalid_idx').on(users.externalId),
+    };
+  }
+);
+
+export const profiles = pgTable(
+  'profiles',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id').references(() => users.id),
+    avatar: varchar('avatar', { length: 255 }).notNull().default(''),
+    username: varchar('username', { length: 255 }).notNull().default(''),
+    email: varchar('email', { length: 255 }).notNull().default(''),
+  },
+  (profiles) => {
+    return {
+      userIdIndex: uniqueIndex('user_id_idx').on(profiles.userId),
     };
   }
 );
