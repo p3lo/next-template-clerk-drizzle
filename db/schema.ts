@@ -1,4 +1,4 @@
-import type { InferModel } from 'drizzle-orm';
+import { relations, type InferModel } from 'drizzle-orm';
 import { integer, json, pgTable, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable(
@@ -31,5 +31,19 @@ export const profiles = pgTable(
     };
   }
 );
+
+export const usersRelations = relations(users, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [users.id],
+    references: [profiles.userId],
+  }),
+}));
+
+export const profilesRelations = relations(profiles, ({ one }) => ({
+  user: one(users, {
+    fields: [profiles.userId],
+    references: [users.id],
+  }),
+}));
 
 export type User = InferModel<typeof users>;
