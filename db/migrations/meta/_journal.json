@@ -8,6 +8,13 @@
       "when": 1684420827938,
       "tag": "0000_fancy_ozymandias",
       "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1684783180191,
+      "tag": "0001_spicy_talisman",
+      "breakpoints": false
     }
   ]
 }

@@ -1,6 +1,6 @@
 // import { prisma } from "@/lib/db";
 import { db } from '@/db/db';
-import { users } from '@/db/schema';
+import { profiles, users } from '@/db/schema';
 import { clerkClient } from '@clerk/nextjs/server';
 import { IncomingHttpHeaders } from 'http';
 import { headers } from 'next/headers';
@@ -28,12 +28,20 @@ async function handler(request: Request) {
   }
 
   const eventType: EventType = evt.type;
-  if (eventType === 'user.created' || eventType === 'user.updated') {
+  if (eventType === 'user.created') {
     const { id, username, ...attributes } = evt.data;
-    await db
-      .insert(users)
-      .values({ externalId: id as string, userInfo: attributes })
-      .onConflictDoUpdate({ target: users.externalId, set: { userInfo: attributes } });
+
+    await db.transaction(async (trx) => {
+      const user = await trx
+        .insert(users)
+        .values({ externalId: id as string, userInfo: attributes })
+        .onConflictDoUpdate({ target: users.externalId, set: { userInfo: attributes } })
+        .returning();
+
+      await trx
+        .insert(profiles)
+        .values({ userId: user[0].id, avatar: '' as string, username: username as string, email: '' as string });
+    });
   }
 }
 
