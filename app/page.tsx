@@ -22,7 +22,6 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center min-h-screen p-24">
-      <Link href="/sign-up">Signup</Link>
       <form action={handleMigrateDb}>
         <Button>MigrateDB</Button>
       </form>
