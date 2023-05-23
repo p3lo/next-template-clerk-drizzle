@@ -14,15 +14,11 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <ClerkProvider>
         <body className={`${inter.className} min-h-screen bg-background font-sans antialiased`}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex flex-col min-h-screen">
-              <Header />
-              <div className="flex-1">{children}</div>
-              <Footer />
-            </div>
+            {children}
           </ThemeProvider>
         </body>
       </ClerkProvider>
