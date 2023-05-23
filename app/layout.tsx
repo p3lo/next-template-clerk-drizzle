@@ -3,6 +3,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,11 +16,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <ClerkProvider>
-        <body className={`${inter.className} h-screen w-full flex flex-col`}>
-          <Header />
-
-          <div className="grow">{children}</div>
-          <Footer />
+        <body className={`${inter.className} min-h-screen bg-background font-sans antialiased`}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="relative flex flex-col min-h-screen">
+              <Header />
+              <div className="flex-1">{children}</div>
+              <Footer />
+            </div>
+          </ThemeProvider>
         </body>
       </ClerkProvider>
     </html>

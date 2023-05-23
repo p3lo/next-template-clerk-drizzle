@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
 import SignOutButton from './SignOutButton';
+import { ThemeChange } from './ThemeChange';
 
 export default function Header() {
   return (
@@ -24,6 +25,7 @@ export default function Header() {
             <SignedIn>
               <SignOutButton />
             </SignedIn>
+            <ThemeChange />
           </div>
         </div>
       </div>
